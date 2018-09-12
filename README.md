@@ -20,7 +20,7 @@ The entire process was filmed here: https://youtu.be/lU1GVVU9gLU
 
 -Connect a Pre-amp audio source (like the + prong off an RCA connector coming from any audio soruce (3.5mm jack on a mobile phone or an output port from an audio mixer) to pin labeled A4 on your Arduino, it's important that it isn't amplified!)
 
--Connect your arduino to a power source (the USB connector is fine) and run a GND wire to the white cable on your LEDs, this way the arduino and LEDs can have shared ground if they don't share a power source, if both the strip and the Arduino are connected to the same power source this step may be optional.
+-Connect your arduino to different a power source (the USB connector from a computer or laptop is fine) and run a GND wire from the arduino to the white cable on your LEDs, this way the arduino and LEDs can have shared ground if they don't share a power source, if both the strip and the Arduino are connected to the same power source this step may be optional.
 
 ## Note
 Regulate the volume from your audio source (computer, phone or audio mixer) up and down to achieve desired effect
