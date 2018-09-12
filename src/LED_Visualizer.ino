@@ -1,28 +1,44 @@
 /**
- * LED Music Visualizer
- * by Devon Crawford
- * using the FastLED library: http://fastled.io/
- * April 22, 2018
- * Watch the video: https://youtu.be/lU1GVVU9gLU
- */
+  LED-Music-Visualizer                        ▄██▄██▄
+  Based on Devon Crowford's youtube video     ▀█████▀
+  No frequecny to voltage converter necesary    ▀█▀
+
+@echan42
+**/
+
 #include "FastLED.h"
 
-#define NUM_LEDS 300        // How many leds in your strip?
-#define updateLEDS 8        // How many do you want to update every millisecond?
-#define COLOR_SHIFT 180000  // Time for colours to shift to a new spectrum (in ms)
-CRGB leds[NUM_LEDS];        // Define the array of leds
+//  #~~~~~~~~~~~~~~~~~~~~~~~~~~#
+//  #      LED Variables       #
+//  #  Define Strip properties #
+//  #~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-// Define the digital I/O PINS..
-#define DATA_PIN 6          // led data transfer
-#define PITCH_PIN 0         // pitch input from frequency to voltage converter
-#define BRIGHT_PIN 4        // brightness input from amplified audio signal
+#define NUM_LEDS 300        
+#define updateLEDS 3        
+#define COLOR_SHIFT 50  
+CRGB leds[NUM_LEDS];        
 
-// Don't touch these, internal color variation variables
+//  #~~~~~~~~~~~~~~~~~~~~~~~~~~#
+//  #    Arduino Variables     #
+//  #  Define Pin Variables    #
+//  #~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+// Digital pins
+#define DATA_PIN 6          
+#define DATA_PIN2 5
+#define DATA_PIN3 4
+#define DATA_PIN4 7
+
+//Analog pins
+#define PITCH_PIN 4         
+#define BRIGHT_PIN 4        
+
+
 unsigned long setTime = COLOR_SHIFT;
 int shiftC = 0;
 int mulC = 2;
 
-// Define color structure for rgb
+// Initialize RGB variables 
 struct color {
   int r;
   int g;
@@ -33,7 +49,27 @@ typedef struct color Color;
 void setup() { 
     Serial.begin(9600);
   	FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-    pinMode(A0, INPUT);
+    pinMode(A4, INPUT);
+
+    for(int i = 0; i < NUM_LEDS ; i++) {
+      leds[i] = CRGB(0,0,0);
+    }  
+    
+    FastLED.addLeds<NEOPIXEL, DATA_PIN2>(leds, NUM_LEDS);
+    pinMode(A4, INPUT);
+
+    for(int i = 0; i < NUM_LEDS ; i++) {
+      leds[i] = CRGB(0,0,0);
+    }
+    
+    FastLED.addLeds<NEOPIXEL, DATA_PIN3>(leds, NUM_LEDS);
+    pinMode(A4, INPUT);
+
+    for(int i = 0; i < NUM_LEDS ; i++) {
+      leds[i] = CRGB(0,0,0);
+    }
+    
+    FastLED.addLeds<NEOPIXEL, DATA_PIN4>(leds, NUM_LEDS);
     pinMode(A4, INPUT);
 
     for(int i = 0; i < NUM_LEDS ; i++) {
@@ -59,25 +95,28 @@ void loop() {
     }
   }
 
-  // Shift all LEDs to the right by updateLEDS number each time
+  // Left Shift
   for(int i = NUM_LEDS - 1; i >= updateLEDS; i--) {
     leds[i] = leds[i - updateLEDS];
   }
 
-  // Get the pitch and brightness to compute the new color
-  int newPitch = (analogRead(PITCH_PIN)*2) + shiftC;
+  // Change *3 to achieve diferent effects (don't really know what it does but it works)
+  int newPitch = (analogRead(BRIGHT_PIN)*3) + shiftC;
+  
   Color nc = pitchConv(newPitch, analogRead(BRIGHT_PIN));
-
-  // Set the left most updateLEDs with the new color
+  
   for(int i = 0; i < updateLEDS; i++) {
     leds[i] = CRGB(nc.r, nc.g, nc.b);
   }
   FastLED.show();
 
+  // Uncomment for print
   //printColor(nc);
-  delay(1);
+  delay(6);
 }
 
+
+//What follows is actually stolen word for word from Devon Crowford
 /**
  * Converts the analog brightness reading into a percentage
  * 100% brightness is 614.. about 3 volts based on frequency to voltage converter circuit
@@ -157,5 +196,3 @@ void printColor(Color c) {
   Serial.print(c.b);
   Serial.println(" )");
 }
-
-
