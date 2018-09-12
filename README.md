@@ -1,7 +1,7 @@
 
 # Create a realtime LED audio waveform based on the pitch and volume with Arduino
 
-##Download latest version from release section
+### Download latest version from release section
 https://github.com/echan42/LED-Music-Visualizer/releases
 
 ### Watch the video (not really recommended doesn't explain coding or wiring but you will see the end result)
